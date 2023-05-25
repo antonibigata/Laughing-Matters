@@ -110,12 +110,12 @@ model.diffusion_model.num_sample_steps=[INFERENCE_DIFFUSION_STEPS] \
 
 ```bibtex
 @article{DBLP:journals/corr/abs-2305-08854,
-		author = {	Antoni Bigata Casademunt and
-					Rodrigo Mira and
-					Nikita Drobyshev and
-					Konstantinos Vougioukas and
-					Stavros Petridis and
-					Maja Pantic},
+		author = {Antoni Bigata Casademunt and
+			  Rodrigo Mira and
+		          Nikita Drobyshev and
+			  Konstantinos Vougioukas and
+			  Stavros Petridis and
+			  Maja Pantic},
 		title = {Laughing Matters: Introducing Laughing-Face Generation using Diffusion Models},
 		journal = {CoRR},
 		volume = {abs/2305.08854},
