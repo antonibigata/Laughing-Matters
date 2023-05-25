@@ -44,7 +44,6 @@ class VideoDataModule(LightningDataModule):
         file_list_val: str = None,
         file_list_test: str = None,
         resize_size: int = 256,
-        identity_frame: str = "first",
         short_video_format: str = "repeat_first",
         load_in_memory: bool = False,
         num_frames: int = 16,
@@ -101,7 +100,6 @@ class VideoDataModule(LightningDataModule):
             self.data_train = VideoDataset(
                 self.hparams.file_list_train,
                 resize_size=self.hparams.resize_size,
-                identity_frame=self.hparams.identity_frame,
                 num_frames=self.hparams.num_frames,
                 short_video_format=self.hparams.short_video_format,
                 load_in_memory=self.hparams.load_in_memory,
@@ -128,7 +126,6 @@ class VideoDataModule(LightningDataModule):
                 self.data_val = VideoDataset(
                     self.hparams.file_list_val,
                     resize_size=self.hparams.resize_size,
-                    identity_frame=self.hparams.identity_frame,
                     num_frames=self.hparams.num_frames,
                     short_video_format=self.hparams.short_video_format,
                     load_in_memory=self.hparams.load_in_memory,
@@ -156,7 +153,6 @@ class VideoDataModule(LightningDataModule):
                 self.data_test = VideoDataset(
                     self.hparams.file_list_test,
                     resize_size=self.hparams.resize_size,
-                    identity_frame=self.hparams.identity_frame,
                     num_frames=self.hparams.num_frames,
                     short_video_format=self.hparams.short_video_format,
                     load_in_memory=self.hparams.load_in_memory,
