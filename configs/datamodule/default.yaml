@@ -1,0 +1,14 @@
+file_list_train: filelist_train.txt
+file_list_val: filelist_val.txt
+file_list_test: null
+resize_size: 128
+identity_frame: first
+short_video_format: replicate
+batch_size: 4
+num_workers: 8
+num_frames: 16
+pin_memory: True
+persistent_workers: True
+channels: 3
+audio_rate: 
+augment: False

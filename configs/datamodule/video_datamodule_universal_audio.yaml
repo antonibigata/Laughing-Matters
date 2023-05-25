@@ -1,0 +1,22 @@
+_target_: src.datamodules.video_datamodule_universal_audio.VideoDataModule
+
+defaults:
+  - default
+mask_repeated_frames: False
+skip_short_videos_thresh: null
+load_in_memory: False
+condition_dim: ${model.condition_dim}
+step: 1
+allow_incomplete: False # Allow for batch size with different lengths
+separate_condition: False # Don't process the identity in the same way
+audio_folder: Audio_16kHz
+video_folder: CroppedVideos
+video_extension: .avi
+audio_extension: .wav
+audio_rate: 16000
+scale_audio: False
+max_missing_audio_files: 100
+split_audio_to_frames: True
+exclude_dataset: ["newami"]
+augment_audio: False
+use_serious_face: False

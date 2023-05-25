@@ -1,0 +1,21 @@
+_target_: src.models.components.unets.audio.make_a_video_audio.SpaceTimeUnet
+dim: 64
+channels: ${datamodule.channels}
+cond_type: cat
+condition_dim: ${model.condition_dim}
+dim_mult: [1, 2, 4, 8]
+self_attns: [False, False, True, True]
+temporal_compression: [False, False, False, False]
+resnet_block_depths: [1, 1, 1, 1]
+attn_dim_head: 64
+attn_heads: 8
+condition_on_timestep: True
+enable_time: True
+attention_add_ff: True
+# Audio
+defaults:
+  - audio_encoder: mel_spectrogram
+audio_cond_type: mid_scale_shift
+audio_features_type: cat
+init_img_transform: null
+augment_dim: ${model.augment_proba}

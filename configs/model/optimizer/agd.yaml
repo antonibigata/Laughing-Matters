@@ -1,0 +1,3 @@
+_target_: src.optimizers.agd.AGD
+_partial_: true
+gain: 1.

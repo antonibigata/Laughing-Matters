@@ -1,0 +1,6 @@
+_target_: ema_pytorch.EMA
+_partial_: true
+beta: 0.999
+update_after_step: 50000
+update_every: 10
+include_online_model: False

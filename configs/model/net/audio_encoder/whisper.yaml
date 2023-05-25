@@ -1,0 +1,4 @@
+_target_: src.models.components.audio.Whisper.Whisper
+_partial_: true
+model_size: base
+fps: 25

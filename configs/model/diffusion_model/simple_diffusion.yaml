@@ -1,0 +1,12 @@
+_target_: src.models.components.diffusion.simple_diffusion.GaussianDiffusion
+_partial_: True
+# image_size: ${datamodule.resize_size}
+num_frames: ${datamodule.num_frames}
+channels: ${datamodule.channels}
+pred_objective: v
+# noise_schedule=logsnr_schedule_cosine,
+noise_d: 32
+noise_d_low: null
+noise_d_high: null
+num_sample_steps: 500
+clip_sample_denoised: True

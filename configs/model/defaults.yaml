@@ -1,0 +1,28 @@
+_target_: src.models.diffusion_module.DiffusionModule
+
+image_size: ${datamodule.resize_size}
+calculate_fid: False
+n_images_fid: 100
+sample_and_save_every: 1000 
+wandb_fps: 25
+augment_proba: 0.15
+num_frames_val: ${datamodule.num_frames} # Can be different from num_frames during training
+autoregressive_passes: 1
+cond_scale: 1
+record_grads: False
+batch_size: ${datamodule.batch_size}
+condition_dim: channels
+unconditional_percent: 0.1
+add_conditional_noise: null
+sample_rate: ${datamodule.audio_rate}
+null_cond_prob: 0.1
+
+loss_fn:
+  _target_: torch.nn.functional.mse_loss 
+  _partial_: true
+
+defaults:
+  - optimizer: adamw
+  - scheduler: cosine_warmup
+  - ema_module: null
+  

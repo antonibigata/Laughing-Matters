@@ -1,0 +1,32 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - model: video_diffusion_edm
+  - datamodule: video_datamodule_universal_audio
+  - trainer: gpu
+  - paths: default
+  - extras: default
+  - hydra: default
+  - logger: 
+
+task_name: "generate"
+
+tags: ["dev"]
+
+# passing checkpoint path is necessary for evaluation
+ckpt_path: ""
+config_path: ""
+image_path: ""
+audio_path: null
+# Preprocessing
+mean_face_path: "./src/utils/face_aligment/mean_face.npy"
+offset: [0.6, 0.6, 0]
+# Video generation 
+autoregressive_passes: 1
+n_generate_frames: 
+save_video: True
+log_folder: "logs/generate"
+fps: 25
+# debug
+debug: False

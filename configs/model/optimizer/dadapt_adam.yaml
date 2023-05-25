@@ -1,0 +1,12 @@
+_target_: src.optimizers.dadapt_adam.DAdaptAdam
+_partial_: true
+lr: 1.0  # Learning rate adjustment parameter. Increases or decreases the D-adapted learning rate.
+betas: [0.9, 0.999]
+eps: 1.e-8 # Term added to the denominator outside of the root operation to improve numerical stability. (default: 0).
+weight_decay: 0 # Weight decay, i.e. a L2 penalty (default: 0).
+log_every: 0
+decouple: False # Use AdamW style decoupled weight decay
+d0: 1.e-6 # Initial D estimate for D-adaptation (default 1e-6). Rarely needs changing.
+# growth_rate: float("inf")   # prevent the D estimate from growing faster than this multiplicative rate.
+                              # Default is inf, for unrestricted. Values like 1.02 give a kind of learning
+                              # rate warmup effect.

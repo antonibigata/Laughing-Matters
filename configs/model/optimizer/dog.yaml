@@ -1,0 +1,7 @@
+_target_: src.optimizers.dog.DoG
+_partial_: true
+reps_rel: 1.e-6
+lr: 1.0
+weight_decay: 0.0
+eps: 1.e-8
+init_eta: null

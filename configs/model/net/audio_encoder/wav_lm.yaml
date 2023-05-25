@@ -1,0 +1,5 @@
+_target_: src.models.components.audio.WavLM.WavLM_wrapper
+_partial_: true
+# path_checkpoint: /home/toni/Projects/PhD/code/generating_laugh/src/models/components/audio/WavLM-Base+.pt
+feed_as_frames: False
+model_size: Base+

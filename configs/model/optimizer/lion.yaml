@@ -1,0 +1,6 @@
+_target_: src.optimizers.lion.Lion
+_partial_: true
+lr: 3.e-5
+betas: [0.95, 0.98]
+weight_decay: 0.0
+use_triton: False

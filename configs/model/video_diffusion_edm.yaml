@@ -1,0 +1,4 @@
+defaults:
+  - defaults
+  - net: make_a_video_audio
+  - diffusion_model: edm

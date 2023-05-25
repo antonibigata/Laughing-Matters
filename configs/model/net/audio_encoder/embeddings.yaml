@@ -1,0 +1,3 @@
+_target_: src.models.components.audio.embeddings.Embeddings
+_partial_: true
+code_size: 2560

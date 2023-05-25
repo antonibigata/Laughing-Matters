@@ -1,0 +1,10 @@
+_target_: src.models.components.diffusion.base_diffusion_video.BaseDiffusionVid
+_partial_: true
+num_frames: ${datamodule.num_frames}
+channels: ${model.net.channels}
+timesteps: 1000
+sampling_timesteps: null
+beta_schedule: cosine
+use_dynamic_thres: False  # from the Imagen paper
+dynamic_thres_percentile: 0.9
+ddim_sampling_eta: 0.0

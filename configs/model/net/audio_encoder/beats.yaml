@@ -1,0 +1,5 @@
+_target_: src.models.components.audio.BEATs.BEATWrapper
+_partial_: true
+# path_checkpoint: /home/toni/Projects/PhD/code/generating_laugh/src/models/components/audio/BEATs_iter3_plus_AS2M_finetuned_on_AS2M_cpt2.pt
+feed_as_frames: False
+fine_tuned: True

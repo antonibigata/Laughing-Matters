@@ -1,0 +1,10 @@
+_target_: src.models.components.audio.audio_rnn.AudioRNN
+_partial_: true
+enc_code_size: 256
+rnn_code_size: 256
+rate: ${datamodule.audio_rate}
+feat_length: 0.2
+overlap: 0.16
+n_layers: 1
+init_kernel: null
+init_stride: null
