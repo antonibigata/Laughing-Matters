@@ -31,9 +31,7 @@ Speech-driven animation has gained significant traction in recent years, with cu
 ```bash
 
 conda  create  -n  laughter  python=3.9  -y
-
 conda  activate  laughter
-
 pip  install  -r  requirements.txt
 
 ```
@@ -58,8 +56,8 @@ Then in ./configs/datamodule/video_datamodule_universal_audio.yaml you can chang
 The dataloader will then only need a filelist of all the videos. To create the filelist, you can use:
 ```bash
 python ./scripts/create_filelist.py --root_dir [ROOT_DATASET] \
---dest_file [DESTINATION_FILE] \
---ext [EXTENSION_VIDEOS]
+	--dest_file [DESTINATION_FILE] \
+	--ext [EXTENSION_VIDEOS]
 ```
 
 ### 3. Training
@@ -68,11 +66,11 @@ Execute the following script:
 
 ```bash
 python src/train.py model=video_diffusion_edm \
-datamodule=video_datamodule_universal_audio \
-datamodule.batch_size=2  \
-datamodule.file_list_test=filelist_test.txt \ 
-datamodule.file_list_train=filelist_train.txt \
-datamodule.file_list_val=filelist_val.txt \
+	datamodule=video_datamodule_universal_audio \
+	datamodule.batch_size=2  \
+	datamodule.file_list_test=filelist_test.txt \ 
+	datamodule.file_list_train=filelist_train.txt \
+	datamodule.file_list_val=filelist_val.txt \
 ```
 
 Then the script will run the model with the default parameters and store the logs in the logs folder. 
@@ -85,9 +83,9 @@ Execute the following script:
 
 ```bash
 python src/eval.py ckpt_path=[CHECKPOINT_FOLDER] \
-model.autoregressive_passes=[N_AUTOREGRESSIVE_PASSES] \
-model.diffusion_model.num_sample_steps=[INFERENCE_DIFFUSION_STEPS] \
-datamodule.num_frames=16 datamodule.step=16  model.num_frames_val=16
+	model.autoregressive_passes=[N_AUTOREGRESSIVE_PASSES] \
+	model.diffusion_model.num_sample_steps=[INFERENCE_DIFFUSION_STEPS] \
+	datamodule.num_frames=16 datamodule.step=16  model.num_frames_val=16
 ```
 The *ckpt_path* can be either the exact checkpoint or a folder containing the checkpoints. In the latter case, the script will look for the more recent checkpoint.
 
@@ -97,11 +95,11 @@ It is also possible to run the model on your own image and audio. For that, run 
 
 ```bash
 python src/generate.py model.num_frames_val=16 \
-ckpt_path=[CHECKPOINT_FOLDER] \
-autoregressive_passes=[N_AUTOREGRESSIVE_PASSES] \
-audio_path=[AUDIO_PATH] \
-image_path=[IMAGE_PATH] \
-model.diffusion_model.num_sample_steps=[INFERENCE_DIFFUSION_STEPS] \
+	ckpt_path=[CHECKPOINT_FOLDER] \
+	autoregressive_passes=[N_AUTOREGRESSIVE_PASSES] \
+	audio_path=[AUDIO_PATH] \
+	image_path=[IMAGE_PATH] \
+	model.diffusion_model.num_sample_steps=[INFERENCE_DIFFUSION_STEPS] \
 ```
 
  
