@@ -37,8 +37,6 @@ def default(val, d):
 
 
 # space time factorized 3d unet
-
-
 class SpaceTimeUnet(nn.Module):
     def __init__(
         self,
@@ -165,7 +163,6 @@ class SpaceTimeUnet(nn.Module):
         )
 
         # layers
-
         self.downs = mlist([])
         self.ups = mlist([])
 
@@ -281,7 +278,6 @@ class SpaceTimeUnet(nn.Module):
     def forward(
         self, x, time, audio=None, augment_labels=None, enable_time=True, cond=None, null_cond_prob=0.0, **kwargs
     ):
-
         # some asserts
         if not self.enable_time:
             enable_time = False
@@ -338,10 +334,6 @@ class SpaceTimeUnet(nn.Module):
         ), f"height and width of the image or video must be a multiple of {self.image_size_multiple}"
 
         if self.has_cond:
-            # batch, device = x.shape[0], x.device
-            # mask = prob_mask_like((batch,), null_cond_prob, device=device)
-            # if cond is not None:
-            #     cond = torch.where(rearrange(mask, "b -> b 1 1 1"), torch.zeros_like(cond), cond)
             if self.cond_type == "time":
                 if cond is not None:
                     cond = rearrange(cond, "b c h w -> b c 1 h w")
@@ -361,7 +353,6 @@ class SpaceTimeUnet(nn.Module):
             x = torch.cat((x, audio.unsqueeze(1)), dim=1)
 
         # main logic
-
         t = self.to_timestep_cond(rearrange(time, "... -> (...)")) if exists(time) else None
         if exists(self.map_augment) and exists(augment_labels):
             augment_labels = self.map_augment(augment_labels)

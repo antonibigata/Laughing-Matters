@@ -105,9 +105,6 @@ def evaluate(cfg: DictConfig) -> Tuple[dict, dict]:
         utils.log_hyperparameters(object_dict)
 
     log.info("Starting testing!")
-    # net = hydra.utils.instantiate(cfg.model.net)
-    # net.load_state_dict(torch.load(cfg.ckpt_path)["state_dict"])
-    # model.load_from_checkpoint(cfg.ckpt_path, strict=False, net=net)
     if cfg.load_separetely:
         net = hydra.utils.instantiate(cfg.model.net)
 
@@ -119,7 +116,7 @@ def evaluate(cfg: DictConfig) -> Tuple[dict, dict]:
             replace=("model.", ""),
             map_location="cuda",
         )
-        # cfg.model.num_frames_val = default(cfg.n_generate_frames, cfg.model.num_frames_val)
+
         video_rate = 25
         if hasattr(datamodule, "video_rate"):
             video_rate = datamodule.video_rate
@@ -129,9 +126,6 @@ def evaluate(cfg: DictConfig) -> Tuple[dict, dict]:
         trainer.test(model=model, datamodule=datamodule)
     else:
         trainer.test(model=model, datamodule=datamodule, ckpt_path=cfg.ckpt_path)
-
-    # for predictions use trainer.predict(...)
-    # predictions = trainer.predict(model=model, dataloaders=dataloaders, ckpt_path=cfg.ckpt_path)
 
     metric_dict = trainer.callback_metrics
 

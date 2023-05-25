@@ -32,7 +32,6 @@ FPS = 25
 
 
 def generate(cfg: DictConfig):
-
     assert cfg.ckpt_path
 
     cfg = configure_cfg_from_checkpoint(cfg)
@@ -87,6 +86,7 @@ def generate(cfg: DictConfig):
         saved_image = rearrange(saved_image, "c h w -> h w c")
         cv2.imwrite(str(image_path.parent / f"{image_path.stem}_processed.png"), saved_image[:, :, ::-1])
 
+    # Process audio
     audio = None
     if cfg.audio_path is not None:
         audio, sr = torchaudio.load(cfg.audio_path, channels_first=True)

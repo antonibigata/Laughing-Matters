@@ -254,8 +254,6 @@ def normalize_img_variance(x, eps=1e-5):
 
 
 # converting gamma to alpha, sigma or logsnr
-
-
 def gamma_to_alpha_sigma(gamma, scale=1):
     return torch.sqrt(gamma) * scale, torch.sqrt(1 - gamma)
 

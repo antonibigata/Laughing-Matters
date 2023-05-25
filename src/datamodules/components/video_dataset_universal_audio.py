@@ -42,21 +42,16 @@ class VideoDataset(Dataset):
         allow_incomplete=False,
         short_video_format="replicate",
         mask_repeated_frames=False,
-        identity_frame="first",
         separate_condition=False,
         max_missing_audio_files=10,
         scale_audio=False,
         split_audio_to_frames=True,
         augment=False,
         augment_audio=False,
-        use_latent=False,
-        latent_type="stable",
-        latent_scale=1,
         exclude_dataset=[],
         use_serious_face=False,
         from_audio_embedding=False,
     ):
-
         self.use_serious_face = use_serious_face
         self.audio_folder = audio_folder
         self.from_audio_embedding = from_audio_embedding
@@ -123,7 +118,6 @@ class VideoDataset(Dataset):
         num_frames = num_frames if not self.need_cond else num_frames + 1
 
         # Get metadata about video and audio
-        # _, self.audio_rate = torchaudio.load(self.audio_filelist[0], channels_first=False)
         vr = decord.VideoReader(self.filelist[0])
         self.video_rate = math.ceil(vr.get_avg_fps())
         print(f"Video rate: {self.video_rate}")
@@ -155,7 +149,6 @@ class VideoDataset(Dataset):
         audio = audio.mean(0, keepdims=True)
         audio = self.maybe_augment_audio(audio)
         audio = torch.from_numpy(audio).float()
-        # audio = torchaudio.functional.resample(audio, orig_freq=sr, new_freq=self.audio_rate)
         audio = trim_pad_audio(audio, self.audio_rate, max_len_sec=max_len_sec)
         return audio[0]
 
@@ -178,8 +171,6 @@ class VideoDataset(Dataset):
 
         if audio_frames is None:
             audio_frames = rearrange(audio, "(f s) -> f s", s=self.samples_per_frame)
-
-        # audio_frames = audio_frames[indexes, :]
 
         n_frames = frames.shape[1]
         needed_frames = self.num_frames
@@ -205,7 +196,7 @@ class VideoDataset(Dataset):
                 raise NotImplementedError(
                     "short_video_format must be 'blacked', 'repeat_last', 'repeat_first' or 'from_image'"
                 )
-        # audio_frames = audio_frames.T
+
         audio_frames = audio_frames[1:]  # Remove audio of first frame
         assert (
             audio_frames.shape[0] == frames.shape[1] - 1
@@ -294,7 +285,6 @@ class VideoDataset(Dataset):
         return self.maybe_augment(video)
 
     def __getitem__(self, idx):
-
         identity, target, mask, audio = self._get_frames_and_audio(idx)
         video_file = self._indexes[idx][1]
         # print("Target", target.shape)
@@ -322,7 +312,6 @@ def collate(batch):
 
     identity_list = torch.stack([identity_list[i] for i in order])
     audio, audio_lengths = pad_n_stack_sequences(audio_list, order=order)
-    # mask_list = torch.stack([mask_list[i] for i in order])
 
     batch = {
         "identity": identity_list,
@@ -341,9 +330,7 @@ if __name__ == "__main__":
     import cv2
 
     transform = transforms.Compose(transforms=[transforms.Resize((256, 256))])
-    dataset = VideoDataset(
-        "/vol/paramonos2/projects/antoni/datasets/mahnob/filelist_videos_val.txt", transform=transform, num_frames=25
-    )
+    dataset = VideoDataset("filelist_videos_val.txt", transform=transform, num_frames=25)
     print(len(dataset))
     idx = np.random.randint(0, len(dataset))
 

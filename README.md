@@ -14,17 +14,11 @@
 Official PyTorch implementation of **["Laughing Matters: Introducing Laughing-Face Generation using Diffusion Models"](https://arxiv.org/abs/2305.08854)**.
 
 [Antoni Bigata Casademunt](https://scholar.google.com/citations?user=LuIdiV8AAAAJ&hl=en&oi=ao),
-
 [Rodrigo Mira](https://scholar.google.com/citations?user=08YfKjcAAAAJ&hl=es&oi=ao),
-
 [Nikita Drobyshev](https://scholar.google.com/citations?user=itNst7wAAAAJ&hl=en),
-
 [Konstantinos Vougioukas](https://scholar.google.co.uk/citations?user=WwLpK44AAAAJ&hl=en),
-
 [Stavros Petridis](https://scholar.google.co.uk/citations?user=6v-UKEMAAAAJ&hl=en),
-
 [Maja Pantic](https://scholar.google.co.uk/citations?user=ygpxbK8AAAAJ&hl=en)
-
 Imperial College London
 
 ### Abstract
@@ -62,10 +56,10 @@ Dataset
 Then in ./configs/datamodule/video_datamodule_universal_audio.yaml you can change the name of the audio and video folder as well as the extension of the videos and the corresponding audio files.
 
 The dataloader will then only need a filelist of all the videos. To create the filelist, you can use:
-```
+```bash
 python ./scripts/create_filelist.py --root_dir [ROOT_DATASET] \
-								   --dest_file [DESTINATION_FILE] \
-								   --ext [EXTENSION_VIDEOS]
+--dest_file [DESTINATION_FILE] \
+--ext [EXTENSION_VIDEOS]
 ```
 
 ### 3. Training
@@ -74,11 +68,11 @@ Execute the following script:
 
 ```bash
 python src/train.py model=video_diffusion_edm \
-					datamodule=video_datamodule_universal_audio \
-					datamodule.batch_size=2  \
-					datamodule.file_list_test=filelist_test.txt \ 
-					datamodule.file_list_train=filelist_train.txt \
-					datamodule.file_list_val=filelist_val.txt \
+datamodule=video_datamodule_universal_audio \
+datamodule.batch_size=2  \
+datamodule.file_list_test=filelist_test.txt \ 
+datamodule.file_list_train=filelist_train.txt \
+datamodule.file_list_val=filelist_val.txt \
 ```
 
 Then the script will run the model with the default parameters and store the logs in the logs folder. 
@@ -91,9 +85,9 @@ Execute the following script:
 
 ```bash
 python src/eval.py ckpt_path=[CHECKPOINT_FOLDER] \
-				   model.autoregressive_passes=[N_AUTOREGRESSIVE_PASSES] \
-				   model.diffusion_model.num_sample_steps=[INFERENCE_DIFFUSION_STEPS] \
-				   datamodule.num_frames=16 datamodule.step=16  model.num_frames_val=16
+model.autoregressive_passes=[N_AUTOREGRESSIVE_PASSES] \
+model.diffusion_model.num_sample_steps=[INFERENCE_DIFFUSION_STEPS] \
+datamodule.num_frames=16 datamodule.step=16  model.num_frames_val=16
 ```
 The *ckpt_path* can be either the exact checkpoint or a folder containing the checkpoints. In the latter case, the script will look for the more recent checkpoint.
 
@@ -103,11 +97,11 @@ It is also possible to run the model on your own image and audio. For that, run 
 
 ```bash
 python src/generate.py model.num_frames_val=16 \
-					   ckpt_path=[CHECKPOINT_FOLDER] \
-					   autoregressive_passes=[N_AUTOREGRESSIVE_PASSES] \
-					   audio_path=[AUDIO_PATH] \
-					   image_path=[IMAGE_PATH] \
-					   model.diffusion_model.num_sample_steps=[INFERENCE_DIFFUSION_STEPS] \
+ckpt_path=[CHECKPOINT_FOLDER] \
+autoregressive_passes=[N_AUTOREGRESSIVE_PASSES] \
+audio_path=[AUDIO_PATH] \
+image_path=[IMAGE_PATH] \
+model.diffusion_model.num_sample_steps=[INFERENCE_DIFFUSION_STEPS] \
 ```
 
  
@@ -116,16 +110,16 @@ python src/generate.py model.num_frames_val=16 \
 
 ```bibtex
 @article{DBLP:journals/corr/abs-2305-08854,
-author = {Antoni Bigata Casademunt and
-Rodrigo Mira and
-Nikita Drobyshev and
-Konstantinos Vougioukas and
-Stavros Petridis and
-Maja Pantic},
-title = {Laughing Matters: Introducing Laughing-Face Generation using Diffusion Models},
-journal = {CoRR},
-volume = {abs/2305.08854},
-year = {2023}
+		author = {	Antoni Bigata Casademunt and
+					Rodrigo Mira and
+					Nikita Drobyshev and
+					Konstantinos Vougioukas and
+					Stavros Petridis and
+					Maja Pantic},
+		title = {Laughing Matters: Introducing Laughing-Face Generation using Diffusion Models},
+		journal = {CoRR},
+		volume = {abs/2305.08854},
+		year = {2023}
 }
 ```
 

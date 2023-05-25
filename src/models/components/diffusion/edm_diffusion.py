@@ -89,8 +89,6 @@ class EDMDiffusion(nn.Module):
         unconditional_percent=None,
         # Conditional noise
         add_conditional_noise=None,
-        # VAE
-        use_latent=False,
     ):
         super().__init__()
 
@@ -125,12 +123,8 @@ class EDMDiffusion(nn.Module):
 
         # normalize and unnormalize image functions
 
-        self.unnormalize_img = unnormalize_to_zero_to_one if not use_latent else lambda x: x
+        self.unnormalize_img = unnormalize_to_zero_to_one
         self.init_noise_sigma = 1.0
-        # if use_latent:
-        #     sigmas = self.sample_schedule(num_sample_steps, rho, sigma_min, sigma_max)
-        #     self.init_noise_sigma = sigmas.max()
-        #     print("Init noise sigma", self.init_noise_sigma)
 
         # elucidating parameters
 
@@ -161,7 +155,6 @@ class EDMDiffusion(nn.Module):
         self.smooth_weight = smooth_weight
 
         # Add conditional noise
-
         self.add_conditional_noise = add_conditional_noise
         if add_conditional_noise == "noise":
             timesteps = 100
@@ -193,11 +186,7 @@ class EDMDiffusion(nn.Module):
     def update_inf_model(self, model):
         self.inference_model = self.edm_precond(model)
 
-    # sampling
-
     # sample schedule
-    # equation (5) in the paper
-
     def sample_schedule(self, num_sample_steps, rho, sigma_min, sigma_max, device="cuda"):
         N = num_sample_steps
         inv_rho = 1 / rho
@@ -221,14 +210,11 @@ class EDMDiffusion(nn.Module):
         init_images=None,
         skip_steps=None,
         autoregressive_passes=1,
-        training_sample=False,  # Useful when audio is shorter than n_frames
         **kwargs,
     ):
-
         batch_size = cond.shape[0] if exists(cond) else batch_size
         image_size = self.image_size
         channels = self.channels
-        # num_frames = self.num_frames if (not training_sample or audio is None) else audio.shape[1]
         num_frames = self.num_frames
         shape = (batch_size, channels, num_frames, image_size, image_size)
 
@@ -297,7 +283,6 @@ class EDMDiffusion(nn.Module):
             for i, (sigma, sigma_next, gamma) in tqdm(
                 enumerate(sigmas_and_gammas), total=total_steps, desc="sampling time step", disable=not use_tqdm
             ):
-
                 unet_kwargs["audio"] = None if audio is None else audio_list[i_reg]
 
                 sigma, sigma_next, gamma = map(lambda t: t.item(), (sigma, sigma_next, gamma))
@@ -375,7 +360,6 @@ class EDMDiffusion(nn.Module):
         return self.unnormalize_img(full_sequence)
 
     # training
-
     def select_random_frames(self, tensor, n):
         B, C, T, H, W = tensor.size()
         selected_frames = torch.zeros((B, C, n, H, W), device=tensor.device, dtype=tensor.dtype)
@@ -393,7 +377,6 @@ class EDMDiffusion(nn.Module):
         return (P_mean + P_std * torch.randn((batch_size,), device=device)).exp()
 
     def variable_length_loss(self, x, y, lengths, loss_func, n_frames_loss=None):
-
         if n_frames_loss is not None:
             # Select n_frames_loss indexes to compute the loss on
             x_sub = self.select_random_frames(x, n_frames_loss)
@@ -432,24 +415,6 @@ class EDMDiffusion(nn.Module):
         assert len(loss) > 0
         return torch.stack(loss)
 
-    # def chunk_predictions(self, noised_images, sigmas, net_func, chunk_size=1, total_size=1, **unet_kwargs):
-    #     all_preds = []
-    #     states = None
-    #     for i in range(0, min(max(total_size - chunk_size, 0), 1), chunk_size):
-    #         x_i = noised_images[:, :, i : i + chunk_size]
-    #         # modify lenghts accordingly
-    #         ######
-    #         x_i, states = net_func(x_i, sigmas, states=states, **unet_kwargs)
-    #         all_preds.append(x_i)
-    #     if i + chunk_size < total_size:
-    #         x_i = noised_images[:, :, i : i + chunk_size]
-
-    #         x_i, states = net_func(x_i, sigmas, states=states, **unet_kwargs)
-    #         all_preds.append(x_i)
-
-    #     x = torch.cat(all_preds, dim=2)
-    #     return x
-
     def diffusion_step(
         self,
         images,
@@ -459,7 +424,6 @@ class EDMDiffusion(nn.Module):
         n_frames_loss=None,
         **kwargs,
     ):
-
         assert is_float_dtype(images.dtype), f"images tensor needs to be floats but {images.dtype} dtype found instead"
 
         batch_size, num_frames = images.shape[0], images.shape[2]
@@ -471,13 +435,10 @@ class EDMDiffusion(nn.Module):
             images, cond_image = cat_images[:, :, :num_frames], cat_images[:, :, -1]
 
         # get the sigmas
-
         sigmas = self.noise_distribution(self.hparams.P_mean, self.hparams.P_std, batch_size, device=images.device)
         padded_sigmas = self.right_pad_dims_to_datatype(sigmas)
 
         # noise
-        # images *= self.init_noise_sigma  # 1 if not latent
-
         noise = torch.randn_like(images, device=images.device)
         noised_images = images + padded_sigmas * noise  # alphas are 1. in the paper
 
@@ -515,8 +476,6 @@ class EDMDiffusion(nn.Module):
 
         # losses
         losses = self.variable_length_loss(denoised_images, images, lengths, self.loss_fn, n_frames_loss=n_frames_loss)
-        # losses = self.loss_fn(denoised_images, images, reduction="none")
-        # losses = reduce(losses, "b ... -> b", "mean")
 
         # loss weighting
         losses = losses * self.loss_weight(self.hparams.sigma_data, sigmas)
@@ -533,7 +492,6 @@ class EDMDiffusion(nn.Module):
             losses += smooth_loss
 
         if self.vgg_weight > 0:
-            # vgg_loss = self.vgg_loss(unnormalize_to_zero_to_one(denoised_images), unnormalize_to_zero_to_one(images))
             vgg_loss = (
                 self.variable_length_loss(
                     unnormalize_to_zero_to_one(denoised_images),
