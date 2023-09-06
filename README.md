@@ -11,7 +11,7 @@
 
 ## Description
 
-Official PyTorch implementation of **["Laughing Matters: Introducing Laughing-Face Generation using Diffusion Models"](https://arxiv.org/abs/2305.08854)**.
+Official PyTorch implementation of **["Laughing Matters: Introducing Laughing-Face Generation using Diffusion Models"](https://sites.google.com/view/laughing-matters)**.
 
 [Antoni Bigata Casademunt](https://scholar.google.com/citations?user=LuIdiV8AAAAJ&hl=en&oi=ao),
 [Rodrigo Mira](https://scholar.google.com/citations?user=08YfKjcAAAAJ&hl=es&oi=ao),
